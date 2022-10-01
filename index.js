@@ -5,8 +5,8 @@ http.createServer(function(req, res) {
 }).listen(8080);
 
 // Discord bot implements
-const Discord = require("discord.js");
-const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES] });
+const { Client, GatewayIntentBits, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages] });
 const prefix = 'spu!';
 const token = process.env.TOKEN;
 
@@ -27,7 +27,7 @@ client.on("ready", () => {
 });
 
 // botがメッセージを受信すると発動され、 上から順に処理される。
-client.on('messageCreate', message => {
+client.on('messageCreate',async message => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
   const args = message.content.slice(prefix.length).trim().split(' ');
@@ -60,12 +60,17 @@ client.on('messageCreate', message => {
       ]
     })
   } else if (command === 'member_role') {
-    if (message.author.id == '728495196303523900') {
+    if (message.author.id == '728495196303523900' || message.author.id == '839803902026579968') {
       if (message.guild.id === '889474199704436776') {
-        const tic1 = new Discord.MessageButton()
-          .setCustomId("join")
-          .setStyle("SUCCESS")
-          .setLabel("参加する");
+        message.delete();
+        const member_role = new ActionRowBuilder()
+          .addComponents(
+            new ButtonBuilder()
+              .setCustomId('join')
+              .setLabel('参加する')
+              .setStyle(ButtonStyle.Success)
+              .setEmoji("📝"),
+          );
         message.channel.send({
           embeds: [
             {
@@ -91,7 +96,7 @@ client.on('messageCreate', message => {
               name: 'me.png',
             },
           ],
-          components: [new Discord.MessageActionRow().addComponents(tic1)]
+          components: [ member_role ]
         });
       } else {
         message.channel.send({
@@ -118,12 +123,17 @@ client.on('messageCreate', message => {
       })
     }
   } else if (command === 'role_panel') {
-    if (message.author.id == '728495196303523900') {
+    if (message.author.id == '728495196303523900' || message.author.id == '839803902026579968') {
       if (message.guild.id === '889474199704436776') {
-        const tic2 = new Discord.MessageButton()
-          .setCustomId("role1")
-          .setStyle("PRIMARY")
-          .setLabel("📢アナウンスロール");
+        message.delete();
+        const  announce_role = new ActionRowBuilder()
+          .addComponents(
+            new ButtonBuilder()
+              .setCustomId('role1')
+              .setLabel('アナウンスロール')
+              .setStyle(ButtonStyle.Primary)
+              .setEmoji("📢"),
+          );
         message.channel.send({
           embeds: [
             {
@@ -141,7 +151,7 @@ client.on('messageCreate', message => {
               name: 'logo.png',
             }
           ],
-          components: [new Discord.MessageActionRow().addComponents(tic2)]
+          components: [ announce_role ]
         });
       } else {
         message.channel.send({
@@ -199,13 +209,13 @@ client.on("interactionCreate", async (interaction) => {
     if (interaction.member.roles.cache.has('951364197600591882')) {
       interaction.member.roles.remove('951364197600591882')
       await interaction.reply({
-        content: 'ロールを剝奪しました',
+        content: '<@' + interaction.user.id + '>からロールを剝奪しました',
         ephemeral: true
       });
     } else {
       interaction.member.roles.add('951364197600591882')
       await interaction.reply({
-        content: 'ロールを付与しました',
+        content: '<@' + interaction.user.id + '>にロールを付与しました',
         ephemeral: true
       });
     }
