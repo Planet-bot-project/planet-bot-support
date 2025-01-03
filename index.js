@@ -13,6 +13,7 @@ const {
   ButtonBuilder,
   ActionRowBuilder,
   ButtonStyle,
+  MessageFlags,
 } = require("discord.js");
 const client = new Client({
   intents: [
@@ -129,7 +130,7 @@ client.on("messageCreate", async (message) => {
               color: 0xff0000,
             },
           ],
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
         });
       }
     } else {
@@ -142,7 +143,7 @@ client.on("messageCreate", async (message) => {
             color: 0xff0000,
           },
         ],
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
   } else if (command === "role_panel") {
@@ -189,7 +190,7 @@ client.on("messageCreate", async (message) => {
               color: 0xff0000,
             },
           ],
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
         });
       }
     } else {
@@ -202,7 +203,7 @@ client.on("messageCreate", async (message) => {
             color: 0xff0000,
           },
         ],
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
   }
@@ -213,13 +214,13 @@ client.on("interactionCreate", async (interaction) => {
     if (interaction.member.roles.cache.has("889474498699595826")) {
       await interaction.reply({
         content: "あなたは既に参加済みです",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     } else {
       interaction.member.roles.add("889474498699595826");
       await interaction.reply({
         content: "参加手続きが完了しました。",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
       await client.channels.cache.get("889756065531564052").send({
         embeds: [
@@ -238,13 +239,13 @@ client.on("interactionCreate", async (interaction) => {
       interaction.member.roles.remove("951364197600591882");
       await interaction.reply({
         content: "<@" + interaction.user.id + ">からロールを剝奪しました",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     } else {
       interaction.member.roles.add("951364197600591882");
       await interaction.reply({
         content: "<@" + interaction.user.id + ">にロールを付与しました",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
     return;
