@@ -22,7 +22,7 @@ const client = new Client({
     GatewayIntentBits.GuildMessages,
   ],
 });
-require("dotenv").config();
+require("dotenv").config({ quiet: true });
 
 const prefix = "spu!";
 const token = process.env.token;
